@@ -1,6 +1,11 @@
 # Getting Started with Create React App
 
+<<<<<<< HEAD
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+=======
+## Dataset
+Acquired Dataset form [this link.](https://github.com/cmastrokostas/Wordle-Data-Preparation)
+>>>>>>> 85b8ff141f77a3c2c62e2f08887c2ac43a041525
 
 ## Available Scripts
 
