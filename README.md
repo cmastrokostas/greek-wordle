@@ -8,4 +8,4 @@ Acquired Dataset form [this link.](https://github.com/cmastrokostas/Wordle-Data-
 ## Contributors 
 * Mastokostas Charalampos
 * Mastrominas Ioannis
-* Stamatiou Marios
+* Stamatiou Marios (mariostamatiou@gmail.com)
