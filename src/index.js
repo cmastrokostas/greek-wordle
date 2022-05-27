@@ -206,7 +206,7 @@ class Game extends React.Component {
         return (
             <div className = "game">
                 <nav >
-                    <h1>Greek Wordle</h1>
+                    <h1>Greekle</h1>
                 </nav>
                 <Board/>
             </div>
