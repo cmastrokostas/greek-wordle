@@ -3,9 +3,8 @@ This project was created as the final project of  the course "Advanced Programmi
 
 ## Dataset
 Acquired Dataset form [this link.](https://github.com/cmastrokostas/Word-Length-CSV-Filter)
-Acquired Dataset form [this link.](https://github.com/cmastrokostas/Wordle-Data-Preparation)
 
 ## Contributors 
 * Mastokostas Charalampos
 * Mastrominas Ioannis
-* Stamatiou Marios
+* Stamatiou Marios (mariostamatiou@gmail.com)
