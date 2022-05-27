@@ -1,8 +1,11 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
+import wordList from "./el_GR_n_5.txt" ; 
+import {genWordSet} from "./Words.js";
 
 function Letter(props) {
+
     return(
         <button className='square'>
             {props.content}
@@ -10,12 +13,14 @@ function Letter(props) {
     );
 }
 
+
 class Word extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
         }
     }
+
 
     renderLetter(i) {
         return(
@@ -36,10 +41,12 @@ class Word extends React.Component {
     }
 }
 
+
 function Key(props) {
     return (
-        <button className="key-button" onClick={props.onClick}>
+        <button className="key-button" onClick={props.onClick} >
             {props.value}
+
         </button>
     )
 }
@@ -49,7 +56,10 @@ class Keyboard extends React.Component {
         super(props);
         this.state = {
         }
+
     }
+
+
 
     renderKey(i) {
         return(
@@ -62,6 +72,8 @@ class Keyboard extends React.Component {
     handleClick(i) {
         this.props.callback(i);
     }
+
+    
 
     render() {
         return(
@@ -101,35 +113,61 @@ class Keyboard extends React.Component {
             </div>
         )
     }
+
+    
 }
 
 class Board extends React.Component {
     constructor(props) {
         super(props);
         const words = Array(6).fill();
+        const dailyWord = 'ΣΩΣΤΟ'
+
+        const wordSet = genWordSet();
         for(let i=0;i<words.length;i++){
             words[i] = Array(5).fill(null)
         }
         this.state = {
             words: words,
             tries: 0,
+            wordSet: wordSet,
+            dailyword: 'ΣΩΣΤΟ'
         };
+
         this.callbackLetterClicked=this.callbackLetterClicked.bind(this);
     }
+    
     callbackLetterClicked (letter) {
+
         const words = this.state.words.slice() //copy cause we want immutability
         //increases index until it finds the first non-null item
         let ind1 = this.state.tries;
         let ind2 = 0;
+
         while(words[ind1][ind2]){
             ind2++;
         } 
+
         if(letter === 'Del'){
             words[ind1][ind2-1] = null;
         } else if(letter === 'Enter') {
+
             if(ind2 === 5){
-                //call js function
-                this.state.tries ++;
+                let currWord='';
+                for(let i=0;i<5;i++){
+                    currWord+=this.state.words[ind1][i];
+                }
+                if(currWord === this.state.dailyword){
+                    alert("Σωστή Λέξη!")
+                    //todo Return Session Stats
+                }
+                else if(this.state.wordSet.has(currWord)){
+                    console.log('eureka');
+                    this.setState({tries: ind1+1});
+                }
+                else{
+                    alert("Μη Έγκυρη Λεξη!")
+                }
             }
         } else if(ind2 <= 4){
             words[ind1][ind2] = letter;
@@ -138,6 +176,7 @@ class Board extends React.Component {
             words: words,
         })
     }
+
     renderWord(i) {
         return(
             <Word content = {this.state.words[i]}/>
@@ -161,15 +200,19 @@ class Board extends React.Component {
         )
     }
 }
-
 class Game extends React.Component {
+    
     render() {
         return (
             <div className = "game">
-                    <Board />
+                <nav >
+                    <h1>Greek Wordle</h1>
+                </nav>
+                <Board/>
             </div>
         );
     }
+    
 }
 
 const root = ReactDOM.createRoot(document.getElementById("root"));

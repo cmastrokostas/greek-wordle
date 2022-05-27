@@ -41,3 +41,11 @@
     cursor: pointer;
     text-transform: uppercase;
   }
+
+.game {
+    text-align: center;
+    width: 100vw;
+    height: 100vh;
+    /* display: flex; */
+    color: rgb(0, 0, 0);
+  }
