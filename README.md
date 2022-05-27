@@ -1,4 +1,4 @@
-# greek-wordle
+# Greekle
 This project was created as the final project of  the course "Advanced Programming Techniques". 2021-2022  
 
 ## Dataset
