@@ -4,10 +4,18 @@ import './index.css';
 import wordList from "./el_GR_n_5.txt" ; 
 import {genWordSet} from "./Words.js";
 
-function Letter(props) {
+let request = new XMLHttpRequest();
+request.open('GET', 'http://localhost:8080/dailyword')
+request.send();
+request.onload = () => {
+    console.log(request)
+    
+}
 
+function Letter(props, i) {
+    
     return(
-        <button className='square'>
+        <button className='square' >
             {props.content}
         </button>
     );
@@ -201,7 +209,7 @@ class Board extends React.Component {
     }
 }
 class Game extends React.Component {
-    
+
     render() {
         return (
             <div className = "game">
