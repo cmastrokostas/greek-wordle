@@ -8,8 +8,7 @@ let request = new XMLHttpRequest();
 request.open('GET', 'http://localhost:8080/dailyword')
 request.send();
 request.onload = () => {
-    console.log(request)
-    
+    console.log(request.responseText)
 }
 
 function Letter(props, i) {

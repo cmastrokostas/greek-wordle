@@ -23,8 +23,7 @@ app.listen(
 )
 
 app.get('/dailyword', (req,res) => {
-    res.status(200).send({
-        dailyword: wordArr[rand],
-
-    })
+    res.status(200).send(
+        wordArr[rand],
+    )
 });
