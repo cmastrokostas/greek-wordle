@@ -5,4 +5,3 @@ export const genWordSet = () => {
 
         return wordSet;
     }
-

@@ -4,15 +4,14 @@ import './index.css';
 import wordList from "./el_GR_n_5.txt" ; 
 import {genWordSet} from "./Words.js";
 
-function Letter(props) {
-
-    return(
-        <button className='square'>
-            {props.content}
-        </button>
-    );
+let request = new XMLHttpRequest();
+request.open('GET', 'http://localhost:8080/dailyword')
+request.send();
+request.onload = () => {
+    console.log(request.responseText)
 }
 
+const dailyWord = "ΣΩΣΤΟ"
 
 class Word extends React.Component {
     constructor(props) {
@@ -23,8 +22,15 @@ class Word extends React.Component {
 
 
     renderLetter(i) {
+         //request.responseText""
+        const correct = dailyWord[i] === this.props.content[i]
+        const almost = !correct && this.props.content[i]!== "" && dailyWord.includes(this.props.content[i])
+        const letterState = (correct ? "correct" : almost ? "almost" : "false");
+        
         return(
-            <Letter content = {this.props.content[i]} />
+            <button className='square' id = {letterState}>
+            {this.props.content[i]}
+        </button>
         );
     }
 
@@ -38,6 +44,7 @@ class Word extends React.Component {
                 {this.renderLetter(4)}
             </div>
         )
+        
     }
 }
 
@@ -143,6 +150,7 @@ class Board extends React.Component {
         //increases index until it finds the first non-null item
         let ind1 = this.state.tries;
         let ind2 = 0;
+        
 
         while(words[ind1][ind2]){
             ind2++;
@@ -151,7 +159,6 @@ class Board extends React.Component {
         if(letter === 'Del'){
             words[ind1][ind2-1] = null;
         } else if(letter === 'Enter') {
-
             if(ind2 === 5){
                 let currWord='';
                 for(let i=0;i<5;i++){
@@ -182,6 +189,7 @@ class Board extends React.Component {
             <Word content = {this.state.words[i]}/>
         )
     }
+
     render() {
         return (
             <div className='game-board'>
@@ -201,7 +209,7 @@ class Board extends React.Component {
     }
 }
 class Game extends React.Component {
-    
+
     render() {
         return (
             <div className = "game">
