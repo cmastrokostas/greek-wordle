@@ -12,9 +12,20 @@
     text-transform: uppercase;
 }
 
+#correct {
+background-color: #458a40;
+}
+
+#almost {
+background-color: #c5af41;
+}
+
+#false {
+background-color: #f8f8f8;
+}
 .board-row {
-    display: flex;
-  }
+display: flex;
+}
 
 .game-board {
     display: flex;

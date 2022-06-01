@@ -1,3 +1,4 @@
+
 import React, {useEffect} from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
@@ -11,15 +12,26 @@ request.onload = () => {
     console.log(request.responseText)
 }
 
+const dailyWord = request.responseText
+
 function Letter(props, i) {
+
+    let sqStyle= "";
+    if(props.class=="almost"){
+        sqStyle={backgroundColor: "#c5af41",};
+    }else if(props.class=="correct"){
+        sqStyle={backgroundColor: "#458a40",};
+    }else{
+        sqStyle={backgroundColor: "#f8f8f8",};
+
+    }
     
     return(
-        <button className='square' >
+        <button className= "square" style={sqStyle}>
             {props.content}
         </button>
     );
 }
-
 
 class Word extends React.Component {
     constructor(props) {
@@ -30,10 +42,22 @@ class Word extends React.Component {
 
 
     renderLetter(i) {
+        //const colours = ["correct", "correct", "false", "false", "false"];
+
         return(
-            <Letter content = {this.props.content[i]} />
+            <Letter content = {this.props.content[i]} class= {this.props.colours[i]}/>
         );
     }
+    // renderLetter(i) {
+    //      //request.responseText""
+    //     const dailyWord = 'ΣΩΣΤΟ';
+
+    //     return(
+    //         <button className='square' id = {letterState}>
+    //         {this.props.content[i]}
+    //     </button>
+    //     );
+    // }
 
     render() {
         return (
@@ -45,6 +69,7 @@ class Word extends React.Component {
                 {this.renderLetter(4)}
             </div>
         )
+        
     }
 }
 
@@ -128,17 +153,20 @@ class Board extends React.Component {
     constructor(props) {
         super(props);
         const words = Array(6).fill();
+        const colours = Array(6).fill()
         const dailyWord = 'ΣΩΣΤΟ'
 
         const wordSet = genWordSet();
         for(let i=0;i<words.length;i++){
             words[i] = Array(5).fill(null)
+            colours[i]=Array(5).fill("square");
         }
         this.state = {
             words: words,
+            colours: colours,
             tries: 0,
             wordSet: wordSet,
-            dailyword: 'ΣΩΣΤΟ'
+            dailyword: 'ΣΩΣΤΟ',
         };
 
         this.callbackLetterClicked=this.callbackLetterClicked.bind(this);
@@ -147,9 +175,11 @@ class Board extends React.Component {
     callbackLetterClicked (letter) {
 
         const words = this.state.words.slice() //copy cause we want immutability
+        const colours= this.state.colours.slice()
         //increases index until it finds the first non-null item
         let ind1 = this.state.tries;
         let ind2 = 0;
+        
 
         while(words[ind1][ind2]){
             ind2++;
@@ -158,7 +188,7 @@ class Board extends React.Component {
         if(letter === 'Del'){
             words[ind1][ind2-1] = null;
         } else if(letter === 'Enter') {
-
+            let flag = false;
             if(ind2 === 5){
                 let currWord='';
                 for(let i=0;i<5;i++){
@@ -173,22 +203,29 @@ class Board extends React.Component {
                     this.setState({tries: ind1+1});
                 }
                 else{
+                    flag=true;
                     alert("Μη Έγκυρη Λεξη!")
                 }
+            }
+            //elgxos gia xrwma
+            if(!flag){
+                colours[ind1]  = checkColours(words[ind1], colours[ind1], this.state.dailyword);
             }
         } else if(ind2 <= 4){
             words[ind1][ind2] = letter;
         }
         this.setState({
             words: words,
+            colours: colours,
         })
     }
 
     renderWord(i) {
         return(
-            <Word content = {this.state.words[i]}/>
+            <Word content = {this.state.words[i]} colours = {this.state.colours[i]}/>
         )
     }
+
     render() {
         return (
             <div className='game-board'>
@@ -220,6 +257,19 @@ class Game extends React.Component {
         );
     }
     
+}
+
+function checkColours(word, colours, dailyWord) {
+    //word[.....], colours=[.....], dailyword
+    for(let i=0;i<5;i++){
+        if (dailyWord[i] === word[i]){
+            colours[i] = 'correct'
+        }
+        else if (word[i] !== "" && dailyWord.includes(word[i])){
+        colours[i] = 'almost'
+        }
+    }
+    return colours;
 }
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
