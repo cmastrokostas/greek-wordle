@@ -20,7 +20,6 @@ class Word extends React.Component {
         }
     }
 
-
     renderLetter(i) {
          //request.responseText""
         const correct = dailyWord[i] === this.props.content[i]
@@ -29,8 +28,8 @@ class Word extends React.Component {
         
         return(
             <button className='square' id = {letterState}>
-            {this.props.content[i]}
-        </button>
+                {this.props.content[i]}
+            </button>
         );
     }
 
