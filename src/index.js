@@ -20,6 +20,7 @@ class Word extends React.Component {
         }
     }
 
+
     renderLetter(i) {
          //request.responseText""
         const correct = dailyWord[i] === this.props.content[i]
