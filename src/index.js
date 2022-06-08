@@ -1,4 +1,3 @@
-
 import React, {useEffect} from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
@@ -18,10 +17,16 @@ function Letter(props, i) {
 
     let sqStyle= "";
     if(props.class=="almost"){
-        sqStyle={backgroundColor: "#c5af41",};
-    }else if(props.class=="correct"){
-        sqStyle={backgroundColor: "#458a40",};
-    }else{
+
+        sqStyle={animation:"flip 0.7s ease forwards",backgroundColor: "#c5af41",};
+    }
+    else if(props.class=="correct"){
+        sqStyle={animation:"flip 0.7s ease forwards",backgroundColor: "#458a40",};
+    }
+    else if (props.class == "false"){
+        sqStyle={animation:"flip 0.7s ease forwards",backgroundColor: "#f8f8f8",};
+    }
+    else{
         sqStyle={backgroundColor: "#f8f8f8",};
 
     }
@@ -32,6 +37,7 @@ function Letter(props, i) {
         </button>
     );
 }
+
 
 class Word extends React.Component {
     constructor(props) {
@@ -48,16 +54,7 @@ class Word extends React.Component {
             <Letter content = {this.props.content[i]} class= {this.props.colours[i]}/>
         );
     }
-    // renderLetter(i) {
-    //      //request.responseText""
-    //     const dailyWord = 'ΣΩΣΤΟ';
 
-    //     return(
-    //         <button className='square' id = {letterState}>
-    //         {this.props.content[i]}
-    //     </button>
-    //     );
-    // }
 
     render() {
         return (
@@ -187,6 +184,7 @@ class Board extends React.Component {
 
         if(letter === 'Del'){
             words[ind1][ind2-1] = null;
+            ind2--;
         } else if(letter === 'Enter') {
             let flag = false;
             if(ind2 === 5){
@@ -196,6 +194,7 @@ class Board extends React.Component {
                 }
                 if(currWord === this.state.dailyword){
                     alert("Σωστή Λέξη!")
+                    this.setState({tries: -1}); // finish game 
                     //todo Return Session Stats
                 }
                 else if(this.state.wordSet.has(currWord)){
@@ -208,7 +207,8 @@ class Board extends React.Component {
                 }
             }
             //elgxos gia xrwma
-            if(!flag){
+
+            if(!flag && ind2 === 5){
                 colours[ind1]  = checkColours(words[ind1], colours[ind1], this.state.dailyword);
             }
         } else if(ind2 <= 4){
@@ -266,7 +266,11 @@ function checkColours(word, colours, dailyWord) {
             colours[i] = 'correct'
         }
         else if (word[i] !== "" && dailyWord.includes(word[i])){
-        colours[i] = 'almost'
+            colours[i] = 'almost'
+        }
+        else{
+            colours[i] = 'false'
+
         }
     }
     return colours;
