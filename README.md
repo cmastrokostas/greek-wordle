@@ -1,5 +1,6 @@
 # Greekle
 This project was created as the final project of  the course "Advanced Programming Techniques". 2021-2022  
+![image](https://user-images.githubusercontent.com/53084462/173245048-b1f458d2-1a7f-4edb-9650-69d2f7665568.png)
 
 ## Dataset
 Acquired Dataset from [this link.](https://github.com/cmastrokostas/Word-Length-CSV-Filter)
