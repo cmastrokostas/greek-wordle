@@ -3,30 +3,29 @@
     border-radius: 3px;
     margin: 2px;
     font-size: 2.5rem;
-    font-weight: 700;
-    height: 3rem;
-    width: 3rem;
+    font-weight: bold;
+    height: 4rem;
+    width: 4rem;
     display: flex;
     justify-content: center;
     align-items: center;
     text-transform: uppercase;
 }
 
-#correct {
-background-color: #458a40;
-}
 
-#almost {
-background-color: #c5af41;
-}
-
-#false {
-background-color: #f8f8f8;
-}
 .board-row {
 display: flex;
 }
 
+.title{
+    font-family:'OCR A Std', monospace;
+    font-weight: bold;
+    font-size: 5rem;
+    text-align: center;
+    letter-spacing: 0.1rem;
+    font-variant: small-caps;
+    margin-bottom: 2rem;
+}
 .game-board {
     display: flex;
     align-items: center;
@@ -34,23 +33,27 @@ display: flex;
 }
 
 .keyboard {
-    margin-top: 5em;
+    margin-top: 2rem;
     display: flex;
     align-items: center;
     flex-direction: column;
 }
 
 .key-row {
-    margin: 0.2em 0;
+    margin: 0.2rem 0;
 }
 
 .key-button {
+    height: 3.2rem;
+    width: 4.3rem;
     font-size: 1rem;
     font-weight: 700;
     padding: 0.5rem;
     margin: 0 2px;
     cursor: pointer;
     text-transform: uppercase;
+    border: 2px solid gray;
+
   }
 
 .game {
@@ -60,3 +63,19 @@ display: flex;
     /* display: flex; */
     color: rgb(0, 0, 0);
   }
+  
+  /* animations */
+@keyframes flip{
+    0%{
+        transform: rotateX(0);
+    }
+    45%{
+        transform: rotateX(90deg);
+    }
+    55%{
+        transform: rotateX(90deg);
+    }
+    100%{
+        transform: rotateX(0);
+    }
+}

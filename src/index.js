@@ -1,4 +1,3 @@
-
 import React, {useEffect} from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
@@ -13,25 +12,33 @@ request.onload = () => {
 }
 
 const dailyWord = request.responseText
+var disabled_letters = []
 
 function Letter(props, i) {
 
     let sqStyle= "";
-    if(props.class=="almost"){
-        sqStyle={backgroundColor: "#c5af41",};
-    }else if(props.class=="correct"){
-        sqStyle={backgroundColor: "#458a40",};
-    }else{
+    if(props.class==="almost"){
+
+        sqStyle={animation:"flip 0.7s ease forwards",backgroundColor: "#c5af41",};
+    }
+    else if(props.class==="correct"){
+        sqStyle={animation:"flip 0.7s ease forwards",backgroundColor: "#458a40",};
+    }
+    else if (props.class === "false"){
+        sqStyle={animation:"flip 0.7s ease forwards",backgroundColor: "#f8f8f8",};
+    }
+    else{
         sqStyle={backgroundColor: "#f8f8f8",};
 
     }
     
     return(
-        <button className= "square" style={sqStyle}>
+        <button className= "square" style = {sqStyle}>
             {props.content}
         </button>
     );
 }
+
 
 class Word extends React.Component {
     constructor(props) {
@@ -40,24 +47,13 @@ class Word extends React.Component {
         }
     }
 
-
     renderLetter(i) {
         //const colours = ["correct", "correct", "false", "false", "false"];
 
         return(
-            <Letter content = {this.props.content[i]} class= {this.props.colours[i]}/>
+            <Letter content = {this.props.content[i]} class = {this.props.colours[i]}/>
         );
     }
-    // renderLetter(i) {
-    //      //request.responseText""
-    //     const dailyWord = 'ΣΩΣΤΟ';
-
-    //     return(
-    //         <button className='square' id = {letterState}>
-    //         {this.props.content[i]}
-    //     </button>
-    //     );
-    // }
 
     render() {
         return (
@@ -75,10 +71,15 @@ class Word extends React.Component {
 
 
 function Key(props) {
+    let sqStyle= {};
+    if(disabled_letters.includes(props.value)){
+        sqStyle = {backgroundColor: "#626262"}
+    }
+    else{sqStyle = {backgroundColor: "#f8f8f8"};
+    }
     return (
-        <button className="key-button" onClick={props.onClick} >
+        <button className="key-button" onClick={props.onClick} style = {sqStyle}>
             {props.value}
-
         </button>
     )
 }
@@ -171,7 +172,7 @@ class Board extends React.Component {
 
         this.callbackLetterClicked=this.callbackLetterClicked.bind(this);
     }
-    
+
     callbackLetterClicked (letter) {
 
         const words = this.state.words.slice() //copy cause we want immutability
@@ -179,7 +180,6 @@ class Board extends React.Component {
         //increases index until it finds the first non-null item
         let ind1 = this.state.tries;
         let ind2 = 0;
-        
 
         while(words[ind1][ind2]){
             ind2++;
@@ -187,6 +187,7 @@ class Board extends React.Component {
 
         if(letter === 'Del'){
             words[ind1][ind2-1] = null;
+            ind2--;
         } else if(letter === 'Enter') {
             let flag = false;
             if(ind2 === 5){
@@ -195,7 +196,8 @@ class Board extends React.Component {
                     currWord+=this.state.words[ind1][i];
                 }
                 if(currWord === this.state.dailyword){
-                    alert("Σωστή Λέξη!")
+                    this.setState({tries: -1});
+                    alert("Σωστή Λέξη!") // finish game 
                     //todo Return Session Stats
                 }
                 else if(this.state.wordSet.has(currWord)){
@@ -208,7 +210,8 @@ class Board extends React.Component {
                 }
             }
             //elgxos gia xrwma
-            if(!flag){
+
+            if(!flag && ind2 === 5){
                 colours[ind1]  = checkColours(words[ind1], colours[ind1], this.state.dailyword);
             }
         } else if(ind2 <= 4){
@@ -250,7 +253,7 @@ class Game extends React.Component {
         return (
             <div className = "game">
                 <nav >
-                    <h1>Greekle</h1>
+                    <h1 className = "title">Greekλe</h1>
                 </nav>
                 <Board/>
             </div>
@@ -266,7 +269,11 @@ function checkColours(word, colours, dailyWord) {
             colours[i] = 'correct'
         }
         else if (word[i] !== "" && dailyWord.includes(word[i])){
-        colours[i] = 'almost'
+            colours[i] = 'almost'
+        }
+        else{
+            colours[i] = 'false'
+            disabled_letters.push(word[i]);
         }
     }
     return colours;
