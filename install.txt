@@ -1,1 +1,6 @@
--On terminal type npm install
+- $ git clone https://github.com/cmastrokostas/greek-wordle
+- Download and install Node.js (https://nodejs.org/en/) if not already.
+- cd .../greek-wordle
+- npm install
+- npm start
+Your default browser will open automatically on http://localhost:3000 if everything was done correctly. 
