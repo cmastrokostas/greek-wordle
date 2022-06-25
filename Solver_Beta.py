@@ -4,11 +4,12 @@ def possibleMatches():
     letter="ω"
     position=1
     wordlist=[]
-    with open('el_GR_n_5.csv',encoding='utf8') as w:
+    with open('src/el_GR_n_5.txt',encoding='utf8') as w:
       words = w.readlines()
-
+    print(words)
     while letter!='':
       del wordlist[:]
+      
       letter=input("What letter do you know? : ")
       color=input("What color is it? (Y,G,B) : ")
       if color == 'g' or color == 'G' or color == 'y' or color == 'Y':
@@ -25,7 +26,9 @@ def possibleMatches():
             if word[position]!=letter:
               wordlist.append(word)
       words=wordlist.copy()
+      
       print(*wordlist)
+      print(words)
   
 if __name__=='__main__':
     t=possibleMatches()
