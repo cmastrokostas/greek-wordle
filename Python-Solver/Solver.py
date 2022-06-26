@@ -1,9 +1,9 @@
 from ast import If
-
+import os
 
 def correctFile(fname):
     words = []
-    with open(fname,encoding='utf8') as w:
+    with open(os.path.join(os.getcwd(),"Python-Solver",fname),encoding='utf8') as w:
       words = w.readlines()
     words[0]=words[0].strip('\ufeff')
     for i in range(len(words)):

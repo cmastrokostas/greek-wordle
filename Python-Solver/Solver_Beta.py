@@ -1,10 +1,11 @@
-
+import os 
 def possibleMatches():
     words = []
     letter="ω"
     position=1
     wordlist=[]
-    with open('el_GR_n_5.txt',encoding='utf8') as w:
+    print(os.getcwd())
+    with open(os.path.join(os.getcwd(),"Python-Solver","el_GR_n_5.txt"),encoding='utf8') as w:
       words = w.readlines()
     print(words)
     while letter!='':
