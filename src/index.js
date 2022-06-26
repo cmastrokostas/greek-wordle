@@ -4,14 +4,8 @@ import './index.css';
 import wordList from "./el_GR_n_5.txt" ; 
 import {genWordSet} from "./Words.js";
 
-let request = new XMLHttpRequest();
-request.open('GET', 'http://localhost:8080/dailyword')
-request.send();
-request.onload = () => {
-    console.log(request.responseText)
-}
 
-const dailyWord = request.responseText
+
 var disabled_letters = []
 
 function Letter(props, i) {
@@ -89,10 +83,7 @@ class Keyboard extends React.Component {
         super(props);
         this.state = {
         }
-
     }
-
-
 
     renderKey(i) {
         return(
@@ -150,13 +141,31 @@ class Keyboard extends React.Component {
     
 }
 
+    // ComponentDidMount is used to
+    // execute the code 
+    //             dailyWord: 'ΣΩΣΤΟ',
+    //             DataisLoaded: false
+    // callBackendAPI = async () => {
+    //     const response = await fetch("http://localhost:8080/dailyword");
+    //     const body = await response.json();
+    
+    //     if (response.status !== 200) {
+    //         throw Error(body.message) 
+    //     }
+    //     console.log(body)
+    //     return body;
+    // };
+    // componentDidMount() {
+    //     this.callBackendAPI()
+    //         .then(res => this.setState({ data: res.data, DataisLoaded: true,}))
+    //         .catch(err => console.log(err));
+    // }
+
 class Board extends React.Component {
     constructor(props) {
         super(props);
         const words = Array(6).fill();
         const colours = Array(6).fill()
-        const dailyWord = 'ΣΩΣΤΟ'
-
         const wordSet = genWordSet();
         for(let i=0;i<words.length;i++){
             words[i] = Array(5).fill(null)
@@ -167,10 +176,28 @@ class Board extends React.Component {
             colours: colours,
             tries: 0,
             wordSet: wordSet,
-            dailyword: 'ΣΩΣΤΟ',
+            dailyWord: '',
+            DataisLoaded: false
         };
 
         this.callbackLetterClicked=this.callbackLetterClicked.bind(this);
+    }
+    componentDidMount() {
+        this.getData();
+    }
+    async getData() {
+        try {
+        const result = await fetch("http://localhost:8080/dailyword");
+        const toJson = await result.json();
+        const stringify = JSON.stringify(toJson, null, 2);
+        const json = JSON.parse(stringify);
+        console.log(json.data)
+        this.setState({
+            dailyWord: json.data
+        })
+        } catch (error) {
+          // ignore error.
+        }
     }
 
     callbackLetterClicked (letter) {
@@ -180,7 +207,7 @@ class Board extends React.Component {
         //increases index until it finds the first non-null item
         let ind1 = this.state.tries;
         let ind2 = 0;
-
+        
         while(words[ind1][ind2]){
             ind2++;
         } 
@@ -195,7 +222,7 @@ class Board extends React.Component {
                 for(let i=0;i<5;i++){
                     currWord+=this.state.words[ind1][i];
                 }
-                if(currWord === this.state.dailyword){
+                if(currWord === this.state.dailyWord){
                     this.setState({tries: -1});
                     alert("Σωστή Λέξη!") // finish game 
                     //todo Return Session Stats
@@ -212,7 +239,7 @@ class Board extends React.Component {
             //elgxos gia xrwma
 
             if(!flag && ind2 === 5){
-                colours[ind1]  = checkColours(words[ind1], colours[ind1], this.state.dailyword);
+                colours[ind1]  = checkColours(words[ind1], colours[ind1], this.state.dailyWord);
             }
         } else if(ind2 <= 4){
             words[ind1][ind2] = letter;
@@ -222,7 +249,6 @@ class Board extends React.Component {
             colours: colours,
         })
     }
-
     renderWord(i) {
         return(
             <Word content = {this.state.words[i]} colours = {this.state.colours[i]}/>
@@ -248,12 +274,11 @@ class Board extends React.Component {
     }
 }
 class Game extends React.Component {
-
     render() {
         return (
             <div className = "game">
                 <nav >
-                    <h1 className = "title">Greekλe</h1>
+                    <h1 className = "title"> Greekλe</h1>
                 </nav>
                 <Board/>
             </div>
@@ -262,23 +287,47 @@ class Game extends React.Component {
     
 }
 
-function checkColours(word, colours, dailyWord) {
-    //word[.....], colours=[.....], dailyword
-    for(let i=0;i<5;i++){
-        if (dailyWord[i] === word[i]){
-            colours[i] = 'correct'
-        }
-        else if (word[i] !== "" && dailyWord.includes(word[i])){
-            colours[i] = 'almost'
-        }
-        else{
-            colours[i] = 'false'
-            disabled_letters.push(word[i]);
+function checkColours(word, colours, dailyWord) { 
+
+    let unmatched = {}; 
+    //Iterate through letters and check for correct letters
+    //And also check unmatched letters
+    for (let i = 0; i < dailyWord.length; i++) {
+        let letter = dailyWord[i];
+        if (letter === word[i]) {
+            colours[i] = 'correct';
+        } else {
+            // If not correct add letter to unmatched.
+            // It might not be correct but it might be present in an other position.
+            unmatched[letter] = (unmatched[letter] || 0) + 1; 
         }
     }
+    //Iterate through letters and check for almost matched letters 
+
+    for (let i = 0; i < word.length; i++) {
+        let letter = word[i];
+        if (letter !== dailyWord[i]) {
+            if (unmatched[letter]) {
+                colours[i] = 'almost';
+                
+                // If it is unmatched and is present somewhere in the word
+                // It doesnt need to be coloured if found again
+                unmatched[letter]--;
+            } else if (letter !== dailyWord[i] && dailyWord.includes(letter)){
+                colours[i] = 'false';
+                //If it is not in correct place but exists somewhere in the word
+                //It is false because it was matched in previous check
+                //Also this step is necessary for not disabling a letter falsly.
+            }else{
+                colours[i] = 'false' ; 
+                disabled_letters.push(word[i]);
+                //Disable False letters in keyboard.
+            }
+        }
+    }
+
     return colours;
 }
-
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(<Game />);
