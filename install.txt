@@ -1,1 +1,0 @@
--On terminal type npm install
