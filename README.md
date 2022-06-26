@@ -6,7 +6,7 @@ This project was created as the final project of  the course "Advanced Programmi
 Acquired Dataset from [this link.](https://github.com/cmastrokostas/Word-Length-CSV-Filter)
 
 ## Contributors 
-* Mastokostas Charalampos
+* Mastokostas Charalampos(chmastrokostas@gmail.com)
 * Mastrominas Ioannis
 * Stamatiou Marios (mariostamatiou@gmail.com)
 # Getting Started with Create React App

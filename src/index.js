@@ -141,6 +141,26 @@ class Keyboard extends React.Component {
     
 }
 
+    // ComponentDidMount is used to
+    // execute the code 
+    //             dailyWord: 'ΣΩΣΤΟ',
+    //             DataisLoaded: false
+    // callBackendAPI = async () => {
+    //     const response = await fetch("http://localhost:8080/dailyword");
+    //     const body = await response.json();
+    
+    //     if (response.status !== 200) {
+    //         throw Error(body.message) 
+    //     }
+    //     console.log(body)
+    //     return body;
+    // };
+    // componentDidMount() {
+    //     this.callBackendAPI()
+    //         .then(res => this.setState({ data: res.data, DataisLoaded: true,}))
+    //         .catch(err => console.log(err));
+    // }
+
 class Board extends React.Component {
     constructor(props) {
         super(props);
