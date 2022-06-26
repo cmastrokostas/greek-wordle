@@ -2,7 +2,6 @@ import React, {useEffect} from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 
-
 var disabled_letters = []
 
 function Letter(props, i) {
@@ -40,7 +39,6 @@ class Word extends React.Component {
 
     renderLetter(i) {
         //const colours = ["correct", "correct", "false", "false", "false"];
-
         return(
             <Letter content = {this.props.content[i]} class = {this.props.colours[i]}/>
         );
@@ -94,8 +92,6 @@ class Keyboard extends React.Component {
         this.props.callback(i);
     }
 
-    
-
     render() {
         return(
             <div className='keyboard'>
@@ -134,29 +130,7 @@ class Keyboard extends React.Component {
             </div>
         )
     }
-
-    
 }
-
-    // ComponentDidMount is used to
-    // execute the code 
-    //             dailyWord: 'ΣΩΣΤΟ',
-    //             DataisLoaded: false
-    // callBackendAPI = async () => {
-    //     const response = await fetch("http://localhost:8080/dailyword");
-    //     const body = await response.json();
-    
-    //     if (response.status !== 200) {
-    //         throw Error(body.message) 
-    //     }
-    //     console.log(body)
-    //     return body;
-    // };
-    // componentDidMount() {
-    //     this.callBackendAPI()
-    //         .then(res => this.setState({ data: res.data, DataisLoaded: true,}))
-    //         .catch(err => console.log(err));
-    // }
 
 class Board extends React.Component {
     constructor(props) {
@@ -176,7 +150,6 @@ class Board extends React.Component {
             dailyWord: '',
             DataisLoaded: false
         };
-
         this.callbackLetterClicked=this.callbackLetterClicked.bind(this);
     }
     componentDidMount() {
@@ -207,7 +180,6 @@ class Board extends React.Component {
     }
 
     callbackLetterClicked (letter) {
-
         const words = this.state.words.slice() //copy cause we want immutability
         const colours= this.state.colours.slice()
         //increases index until it finds the first non-null item
@@ -217,7 +189,6 @@ class Board extends React.Component {
         while(words[ind1][ind2]){
             ind2++;
         } 
-
         if(letter === 'Del'){
             words[ind1][ind2-1] = null;
             ind2--;
@@ -242,8 +213,6 @@ class Board extends React.Component {
                     alert("Μη Έγκυρη Λεξη!")
                 }
             }
-            //elgxos gia xrwma
-
             if(!flag && ind2 === 5){
                 colours[ind1]  = checkColours(words[ind1], colours[ind1], this.state.dailyWord);
             }
@@ -294,7 +263,6 @@ class Game extends React.Component {
 }
 
 function checkColours(word, colours, dailyWord) { 
-
     let unmatched = {}; 
     //Iterate through letters and check for correct letters
     //And also check unmatched letters
@@ -308,14 +276,13 @@ function checkColours(word, colours, dailyWord) {
             unmatched[letter] = (unmatched[letter] || 0) + 1; 
         }
     }
-    //Iterate through letters and check for almost matched letters 
 
+    //Iterate through letters and check for almost matched letters 
     for (let i = 0; i < word.length; i++) {
         let letter = word[i];
         if (letter !== dailyWord[i]) {
             if (unmatched[letter]) {
                 colours[i] = 'almost';
-                
                 // If it is unmatched and is present somewhere in the word
                 // It doesnt need to be coloured if found again
                 unmatched[letter]--;
@@ -331,7 +298,6 @@ function checkColours(word, colours, dailyWord) {
             }
         }
     }
-
     return colours;
 }
 const root = ReactDOM.createRoot(document.getElementById("root"));
