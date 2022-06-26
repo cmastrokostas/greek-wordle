@@ -1,9 +1,6 @@
 import React, {useEffect} from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import wordList from "./el_GR_n_5.txt" ; 
-
-
 
 
 var disabled_letters = []
