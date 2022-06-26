@@ -4,7 +4,7 @@ def possibleMatches():
     letter="ω"
     position=1
     wordlist=[]
-    with open('src/el_GR_n_5.txt',encoding='utf8') as w:
+    with open('el_GR_n_5.txt',encoding='utf8') as w:
       words = w.readlines()
     print(words)
     while letter!='':

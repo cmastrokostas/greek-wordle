@@ -2,7 +2,7 @@ import React, {useEffect} from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import wordList from "./el_GR_n_5.txt" ; 
-import {genWordSet} from "./Words.js";
+
 
 
 
@@ -141,12 +141,32 @@ class Keyboard extends React.Component {
     
 }
 
+    // ComponentDidMount is used to
+    // execute the code 
+    //             dailyWord: 'ΣΩΣΤΟ',
+    //             DataisLoaded: false
+    // callBackendAPI = async () => {
+    //     const response = await fetch("http://localhost:8080/dailyword");
+    //     const body = await response.json();
+    
+    //     if (response.status !== 200) {
+    //         throw Error(body.message) 
+    //     }
+    //     console.log(body)
+    //     return body;
+    // };
+    // componentDidMount() {
+    //     this.callBackendAPI()
+    //         .then(res => this.setState({ data: res.data, DataisLoaded: true,}))
+    //         .catch(err => console.log(err));
+    // }
+
 class Board extends React.Component {
     constructor(props) {
         super(props);
         const words = Array(6).fill();
         const colours = Array(6).fill()
-        const wordSet = genWordSet();
+        // const wordSet = genWordSet();
         for(let i=0;i<words.length;i++){
             words[i] = Array(5).fill(null)
             colours[i]=Array(5).fill("square");
@@ -155,7 +175,7 @@ class Board extends React.Component {
             words: words,
             colours: colours,
             tries: 0,
-            wordSet: wordSet,
+            wordSet: '',
             dailyWord: '',
             DataisLoaded: false
         };
@@ -171,9 +191,18 @@ class Board extends React.Component {
         const toJson = await result.json();
         const stringify = JSON.stringify(toJson, null, 2);
         const json = JSON.parse(stringify);
-        console.log(json.data)
+        console.log(json)
+        const listResult = await fetch("http://localhost:8080/wordlist");
+        const listToJson = await listResult.json();
+        const listStringify = JSON.stringify(listToJson, null, 2);
+        const listJson = JSON.parse(listStringify);
+        console.log(listJson)
+        console.log(json)
+        const newSet = new Set(listJson.data);
         this.setState({
-            dailyWord: json.data
+            dailyWord: json.data,
+            wordSet: newSet,
+            DataisLoaded: true
         })
         } catch (error) {
           // ignore error.
