@@ -19,8 +19,6 @@ const seedrandom = require('seedrandom');
 const generator = seedrandom(day);
 const randomNumber= generator();
 
-
-
 app.use((req, res, next) => {
     res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
     res.setHeader("Access-Control-Allow-Methods", "POST,GET,OPTIONS");
@@ -49,5 +47,10 @@ app.get('/randomword', (req,res) => {
 
 app.get('/wordlist', (req,res) => {
     res.json({data: wordArr}
+    )
+})
+
+app.get('/test', (req,res) => {
+    res.json({data: 'test'}
     )
 })

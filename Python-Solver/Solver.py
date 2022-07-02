@@ -4,7 +4,7 @@ import os
 def correctFile(fname):
     words = []
     with open(os.path.join(os.getcwd(),"Python-Solver",fname),encoding='utf8') as w:
-      words = w.readlines()
+        words = w.readlines()
     words[0]=words[0].strip('\ufeff')
     for i in range(len(words)):
         words[i]=words[i].strip('\n')
@@ -18,10 +18,8 @@ def enterSequence():
         combSequence.append([letterSequence[iter],colorSequence[iter]])
     return combSequence
 
-
-
 def findWords(letter,color,position,words,wordlist):
-    
+
     for word in words:
         if color == 'g' or color == 'G':
             if word[position]==letter:
@@ -33,25 +31,25 @@ def findWords(letter,color,position,words,wordlist):
             if letter in word:
                 if word[position]!=letter:
                     wordlist.append(word)
-        
+
     words=wordlist.copy()
     return words
 
 
 def possibleMatches():
     words = correctFile('el_GR_n_5.txt')
-     
+
     letter="ω"
-    
+
     matches=[]
     while  letter!='ΟΧΙ':
-        
+
         position=0
         combSequence=enterSequence()
-        
+
         for comb in combSequence:
-            
-            
+
+
             letter=str(comb[0])
             color=str(comb[1])
             if position==0:
@@ -61,11 +59,10 @@ def possibleMatches():
                 emptyList=[]
                 matches=findWords(letter,color,int(position),matches,emptyList)
                 position+=1
-                
+
         print(matches)
         break
 
 if __name__=='__main__':
-    
+
     possibleWords=possibleMatches()
-    
