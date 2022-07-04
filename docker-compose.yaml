@@ -1,0 +1,15 @@
+version: "3.8"
+services: 
+  word-api:
+    build: ./Word-API
+    container_name: wordapi
+    ports:
+      - '8080:8080'
+
+  front-end:
+    build: ./Front-End
+    container_name: greekle_frontend
+    ports:
+      - '3000:3000'
+    stdin_open: true
+    tty: true

@@ -1,0 +1,8 @@
+#### Requirements to Run Project
+Follow isntructions on Word-API/install.txt first.
+
+## Main Project - Greek Wordle Online
+* npm install
+* npm audit fix --force ( force fix all vulnerabilities)
+* npm start
+
