@@ -161,13 +161,10 @@ class Board extends React.Component {
         const toJson = await result.json();
         const stringify = JSON.stringify(toJson, null, 2);
         const json = JSON.parse(stringify);
-        console.log(json)
         const listResult = await fetch("http://localhost:8080/wordlist");
         const listToJson = await listResult.json();
         const listStringify = JSON.stringify(listToJson, null, 2);
         const listJson = JSON.parse(listStringify);
-        console.log(listJson)
-        console.log(json)
         const newSet = new Set(listJson.data);
         this.setState({
             dailyWord: json.data,
