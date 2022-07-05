@@ -18,7 +18,6 @@ def correctFile(apiData):
 
 def enterSequence(letterSequence,colorSequence):
     combSequence=[]
-    print(letterSequence)
     #letterSequence=input("Enter Word : ")
     #colorSequence=input("Enter color that matches every letter as a sequence.\nFor example 'YBBGG' : ")
     for iter in range(0,len(letterSequence)):
@@ -29,8 +28,7 @@ def findWords(letter,color,position,words,wordlist):
 
     for word in words:
         if word=='':break
-        print(word)
-        print(position)
+        
         if color == 'g' or color == 'G':
             if word[position]==letter:
                 wordlist.append(word)
@@ -67,11 +65,7 @@ def possibleMatches(letterSequence,colorSequence):
                 emptyList=[]
                 matches=findWords(letter,color,int(position),matches,emptyList)
                 position+=1
-            print(position)
-            
-            
-
-        print(matches)   
+             
         return matches
 
 
