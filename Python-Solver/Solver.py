@@ -1,14 +1,20 @@
 from ast import If
 import os
+import requests
+import json
 
-def correctFile(fname):
-    words = []
-    with open(os.path.join(os.getcwd(),"Python-Solver",fname),encoding='utf8') as w:
-        words = w.readlines()
-    words[0]=words[0].strip('\ufeff')
-    for i in range(len(words)):
-        words[i]=words[i].strip('\n')
-    return words
+def apiDATA():
+    response_API = requests.get('http://localhost:8080/wordlist')
+    data = response_API.text
+    parse_json = json.loads(data)
+    
+    return parse_json['data']
+    
+
+def correctFile(apiData):
+    
+    apiData[0]=apiData[0].strip('\ufeff')
+    return apiData
 
 def enterSequence(letterSequence,colorSequence):
     combSequence=[]
@@ -22,6 +28,9 @@ def enterSequence(letterSequence,colorSequence):
 def findWords(letter,color,position,words,wordlist):
 
     for word in words:
+        if word=='':break
+        print(word)
+        print(position)
         if color == 'g' or color == 'G':
             if word[position]==letter:
                 wordlist.append(word)
@@ -38,32 +47,31 @@ def findWords(letter,color,position,words,wordlist):
 
 
 def possibleMatches(letterSequence,colorSequence):
-    words = correctFile('el_GR_n_5.txt')
+    words = correctFile(apiDATA())
 
     letter="ω"
     matches=[]
     
-
+    
     position=0
     combSequence=enterSequence(letterSequence,colorSequence)
+    while letter!='':
+        for comb in combSequence:
+            
+            letter=str(comb[0])
+            color=str(comb[1])
+            if position==0:
+                matches=findWords(letter,color,int(position),words,matches)
+                position+=1
+            else:
+                emptyList=[]
+                matches=findWords(letter,color,int(position),matches,emptyList)
+                position+=1
+            print(position)
+            
+            
 
-    for comb in combSequence:
-
-
-        letter=str(comb[0])
-        color=str(comb[1])
-        if position==0:
-            matches=findWords(letter,color,int(position),words,matches)
-            position+=1
-        else:
-            emptyList=[]
-            matches=findWords(letter,color,int(position),matches,emptyList)
-            position+=1
-        print(position)
-        
-        
-
-    print(matches)   
-    return matches
+        print(matches)   
+        return matches
 
 

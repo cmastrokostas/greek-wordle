@@ -1,5 +1,4 @@
 import unittest
-
 from Solver import findWords
 
 class TestSolver(unittest.TestCase):
@@ -34,7 +33,7 @@ class TestSolver(unittest.TestCase):
     
         
         letter='Ε'
-        color='Y'  #  Greek Char
+        color='Y' 
         position=2
         words=['ΕΝΑ','ΔΥΟ','ΤΡΙΑ','ΤΕΣΣΕΡΑ']
         wordList=[]
