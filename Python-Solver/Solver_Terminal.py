@@ -67,7 +67,8 @@ def possibleMatches():
                 emptyList=[]
                 matches=findWords(letter,color,int(position),matches,emptyList)
                 position+=1
-        print(*matches)
+                  
+        print("- ",*matches)
         exitInp=str(input('Do you want to continue? (y/n) :'))
         if exitInp=='n':
           break
