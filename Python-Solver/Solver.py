@@ -10,10 +10,11 @@ def correctFile(fname):
         words[i]=words[i].strip('\n')
     return words
 
-def enterSequence():
+def enterSequence(letterSequence,colorSequence):
     combSequence=[]
-    letterSequence=input("Enter Word : ")
-    colorSequence=input("Enter color that matches every letter as a sequence.\nFor example 'YBBGG' : ")
+    print(letterSequence)
+    #letterSequence=input("Enter Word : ")
+    #colorSequence=input("Enter color that matches every letter as a sequence.\nFor example 'YBBGG' : ")
     for iter in range(0,len(letterSequence)):
         combSequence.append([letterSequence[iter],colorSequence[iter]])
     return combSequence
@@ -36,33 +37,33 @@ def findWords(letter,color,position,words,wordlist):
     return words
 
 
-def possibleMatches():
+def possibleMatches(letterSequence,colorSequence):
     words = correctFile('el_GR_n_5.txt')
 
     letter="ω"
-
     matches=[]
-    while  letter!='ΟΧΙ':
+    
 
-        position=0
-        combSequence=enterSequence()
+    position=0
+    combSequence=enterSequence(letterSequence,colorSequence)
 
-        for comb in combSequence:
+    for comb in combSequence:
 
 
-            letter=str(comb[0])
-            color=str(comb[1])
-            if position==0:
-                matches=findWords(letter,color,int(position),words,matches)
-                position+=1
-            else:
-                emptyList=[]
-                matches=findWords(letter,color,int(position),matches,emptyList)
-                position+=1
+        letter=str(comb[0])
+        color=str(comb[1])
+        if position==0:
+            matches=findWords(letter,color,int(position),words,matches)
+            position+=1
+        else:
+            emptyList=[]
+            matches=findWords(letter,color,int(position),matches,emptyList)
+            position+=1
+        print(position)
+        
+        
 
-        print(matches)
-        break
+    print(matches)   
+    return matches
 
-if __name__=='__main__':
 
-    possibleWords=possibleMatches()
