@@ -57,6 +57,20 @@ display: flex;
 
   }
 
+.gameOverScreenMain, .completionScreenMain{
+    width: 40vw;
+    position: absolute;
+    top: 30%;
+    left: 30%;
+    border-radius: 2em;
+    background-color: #c5c9c9;
+    opacity: 0.8;
+    font-size: 2em;
+    padding: 3.5em 0;
+    line-height: 1.6em;
+}
+
+
 .game {
     text-align: center;
     width: 100vw;
