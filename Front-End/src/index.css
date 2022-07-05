@@ -13,6 +13,19 @@
     text-transform: uppercase;
 }
 
+.mode-selection{
+    width: 10em;
+    height: 5em;
+    position: relative;
+    float: left;
+    margin-left: 0;
+    margin-right: auto;
+}
+
+.mode-button{
+    margin: 0.5em 0 0 2em;
+    height: 2em;
+}
 
 .board-row {
 display: flex;
