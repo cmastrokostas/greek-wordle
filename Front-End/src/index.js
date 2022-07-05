@@ -219,8 +219,6 @@ class Board extends React.Component {
         const listToJson = await listResult.json();
         const listStringify = JSON.stringify(listToJson, null, 2);
         const listJson = JSON.parse(listStringify);
-        console.log(listJson)
-        console.log(json)
 
         const newSet = new Set(listJson.data);
         this.setState({
@@ -291,13 +289,11 @@ class Board extends React.Component {
         }
     }
 
-    dailyWordOnClick() {
-        const dailyWord = this.state.dailyWord;
+    dailyWordOnClick() { //changes correct answer to dailyWord (default)
         this.setState({answer: this.state.dailyWord})
     }
 
-    randWordOnClick() {
-        const randWord = this.state.randWord;
+    randWordOnClick() { //changes correct answer to randomWord
         this.setState({answer: this.state.randWord})
     }
 
