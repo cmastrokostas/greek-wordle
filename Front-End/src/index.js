@@ -320,7 +320,7 @@ class Board extends React.Component {
                 </div>
                 <div className = 'final-screen'>
                     <CompletionScreen tries = {this.state.tries} flag = {this.state.wordFound}/>
-                    <GameOverScreen answer = {this.state.dailyWord} flag = {this.state.gameOver}/>
+                    <GameOverScreen answer = {this.state.answer} flag = {this.state.gameOver}/>
                 </div>
                 <div className='keyboard'>
                     <Keyboard callback = {this.callbackLetterClicked}/>
