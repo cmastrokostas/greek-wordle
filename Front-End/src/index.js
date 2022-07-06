@@ -57,6 +57,21 @@ class Word extends React.Component {
     }
 }
 
+function DailyWordBtn(props) {
+    return(
+        <button className = "mode-button" onClick={props.onClick}>
+            Λέξη της Ημέρας
+        </button>
+    );
+}
+
+function RandomWordBtn(props) {
+    return(
+        <button className = "mode-button" onClick={props.onClick}>
+            Τυχαία Λέξη
+        </button>
+    );
+}
 
 function Key(props) {
     let sqStyle= {};
@@ -179,8 +194,11 @@ class Board extends React.Component {
             DataisLoaded: false,
             wordFound: false,
             gameOver: false,
+            answer: '',
         };
         this.callbackLetterClicked=this.callbackLetterClicked.bind(this);
+        this.dailyWordOnClick=this.dailyWordOnClick.bind(this);
+        this.randWordOnClick=this.randWordOnClick.bind(this);
     }
     componentDidMount() {
         this.getData();
@@ -192,7 +210,7 @@ class Board extends React.Component {
         const stringify = JSON.stringify(toJson, null, 2);
         const json = JSON.parse(stringify);
 
-        const randResult = await fetch("http://localhost:8080/dailyword"); //random word
+        const randResult = await fetch("http://localhost:8080/randomword"); //random word
         const randToJson = await randResult.json();
         const randStringify = JSON.stringify(randToJson, null, 2);
         const randJson = JSON.parse(randStringify);
@@ -201,8 +219,6 @@ class Board extends React.Component {
         const listToJson = await listResult.json();
         const listStringify = JSON.stringify(listToJson, null, 2);
         const listJson = JSON.parse(listStringify);
-        console.log(listJson)
-        console.log(json)
 
         const newSet = new Set(listJson.data);
         this.setState({
@@ -210,6 +226,7 @@ class Board extends React.Component {
             randWord: randJson.data,
             wordSet: newSet,
             DataisLoaded: true,
+            answer: json.data,
         })
         } catch (error) {
           // ignore error.
@@ -260,7 +277,7 @@ class Board extends React.Component {
                     }
                 }
                 if(!flag && ind2 === 5){
-                    colours[ind1]  = checkColours(words[ind1], colours[ind1], this.state.dailyWord);
+                    colours[ind1]  = checkColours(words[ind1], colours[ind1], this.state.answer);
                 }
             } else if(ind2 <= 4){
                 words[ind1][ind2] = letter;
@@ -271,6 +288,15 @@ class Board extends React.Component {
             })
         }
     }
+
+    dailyWordOnClick() { //changes correct answer to dailyWord (default)
+        this.setState({answer: this.state.dailyWord})
+    }
+
+    randWordOnClick() { //changes correct answer to randomWord
+        this.setState({answer: this.state.randWord})
+    }
+
     renderWord(i) {
         return(
             <Word content = {this.state.words[i]} colours = {this.state.colours[i]}/>
@@ -280,6 +306,10 @@ class Board extends React.Component {
     render() {
         return (
             <div className='game-board'>
+                <div className = "mode-selection">
+                    <DailyWordBtn onClick = {this.dailyWordOnClick}/>
+                    <RandomWordBtn onClick = {this.randWordOnClick}/>
+                </div>
                 <div className = 'words'>
                     {this.renderWord(0)}
                     {this.renderWord(1)}
