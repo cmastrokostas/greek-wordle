@@ -3,6 +3,9 @@ import os
 import requests
 import json
 
+blackwords = []
+existing_letters=[]
+
 def apiDATA():
     response_API = requests.get('http://localhost:8080/wordlist')
     data = response_API.text
@@ -25,16 +28,15 @@ def enterSequence(letterSequence,colorSequence):
     return combSequence
 
 def findWords(letter,color,position,words,wordlist):
-    blackwords = []
     for word in words:
         if word=='':break
-
         elif color == 'π' or color == 'Π':
             if word[position]==letter:
                 wordlist.append(word)
+                existing_letters.append(letter)
 
         elif color == 'μ' or color == 'Μ':
-            if word[position]==letter :
+            if word[position]==letter or (letter in word and letter not in existing_letters):
                 blackwords.append(word)
 
             else: ##
@@ -42,10 +44,10 @@ def findWords(letter,color,position,words,wordlist):
 
         elif color == 'κ' or color == 'Κ':
             wordlist.append(word)
-
+            existing_letters.append(letter)
     wordlist = [word for word in wordlist if word not in blackwords]
     words=wordlist.copy()
-
+    
     return words
 
 
@@ -70,7 +72,6 @@ def possibleMatches(letterSequence,colorSequence):
                 emptyList=[]
                 matches=findWords(letter,color,int(position),matches,emptyList)
                 position+=1
-             
         return matches
 
 
