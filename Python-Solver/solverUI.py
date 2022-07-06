@@ -51,6 +51,7 @@ class App():
         self.enterButton=tk.Button(self.midFrame2,text='Enter',width=10,bg='gray50',command=self.findPossibleResults).place(relx=0.85,rely=0.35)
 
     def findPossibleResults(self):
+        self.text.delete('1.0',END)
         results=possibleMatches(self.word.get(),self.color.get())
         count=0
         for word in results:

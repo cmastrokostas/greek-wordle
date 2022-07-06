@@ -18,24 +18,26 @@ def correctFile(apiData):
 
 def enterSequence():
     combSequence=[]
-    letterSequence=input("Enter Word : ")
-    colorSequence=input("Enter color that matches every letter as a sequence.\nFor example 'YBBGG' : ")
+    letterSequence=input("Εισάγετε μία λέξη : ")
+    colorSequence=input("Εισάγετε ένα συνδυασμό χρωμάτων, όπως φαίνεται παρακάτω.\nΓια παράδειγμα 'ΚΜΜΠΠ': ")
     for iter in range(0,len(letterSequence)):
         combSequence.append([letterSequence[iter],colorSequence[iter]])
-    return combSequence
+    return [combSequence,letterSequence,colorSequence]
 
-def findWords(letter,color,position,words,wordlist):
+def findWords(letter,color,position,words,wordlist,letterSeq,colorSeq):
 
     for word in words:
         if word=='':break
         
-        if color == 'g' or color == 'G':
+        if color == 'π' or color == 'Π':
             if word[position]==letter:
                 wordlist.append(word)
-        if color == 'b' or color == 'B':
-            if letter not in word:
-                wordlist.append(word)
-        if color == 'y' or color == 'Y':
+                
+        if color == 'μ' or color == 'Μ':
+            if word[position]==letter:
+                words.remove(word)
+            
+        if color == 'κ' or color == 'Κ':
             if letter in word:
                 if word[position]!=letter:
                     wordlist.append(word)
@@ -55,22 +57,22 @@ def possibleMatches():
     first=0
     while letter!='':
         combSequence=enterSequence()
-        for comb in combSequence:
+        for comb in combSequence[0]:
             
             letter=str(comb[0])
             color=str(comb[1])
             if position==0 and first==0:
-                matches=findWords(letter,color,int(position),words,matches)
+                matches=findWords(letter,color,int(position),words,matches,combSequence[1],combSequence[2])
                 position+=1
                 first=1
             else:
                 emptyList=[]
-                matches=findWords(letter,color,int(position),matches,emptyList)
+                matches=findWords(letter,color,int(position),matches,emptyList,combSequence[1],combSequence[2])
                 position+=1
                   
-        print("- ",*matches)
-        exitInp=str(input('Do you want to continue? (y/n) :'))
-        if exitInp=='n':
+        print("Πιθανές Λέξεις: ",*matches)
+        exitInp=str(input('Θες να συνεχίσεις (ΝΑΙ/ΟΧΙ) :'))
+        if exitInp=='ΟΧΙ':
           break
         else:
           position=0

@@ -29,13 +29,14 @@ def findWords(letter,color,position,words,wordlist):
     for word in words:
         if word=='':break
         
-        if color == 'g' or color == 'G':
+        if color == 'π' or color == 'Π':
             if word[position]==letter:
                 wordlist.append(word)
-        if color == 'b' or color == 'B':
+        if color == 'μ' or color == 'Μ':####HERE     
             if letter not in word:
                 wordlist.append(word)
-        if color == 'y' or color == 'Y':
+            
+        if color == 'κ' or color == 'Κ':
             if letter in word:
                 if word[position]!=letter:
                     wordlist.append(word)

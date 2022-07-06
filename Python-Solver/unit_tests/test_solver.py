@@ -10,7 +10,7 @@ class TestSolver(unittest.TestCase):
         wordList=[]
         testCase=findWords(letter,color,position,words,wordList)
 
-        self.assertEqual(['ΕΝΑ',testCase])
+        self.assertEqual(['ΕΝΑ'],testCase)
 
 
         letter='Δ'
@@ -20,7 +20,7 @@ class TestSolver(unittest.TestCase):
         wordList=[]
         testCase=findWords(letter,color,position,words,wordList)
 
-        self.assertNotEqual(['ΕΝΑ',testCase])
+        self.assertNotEqual(['ΕΝΑ'],testCase)
         
         letter='E' #  E : Latin Letter
         color='G'
@@ -28,7 +28,7 @@ class TestSolver(unittest.TestCase):
         words=['ΕΝΑ','ΔΥΟ','ΤΡΙΑ','ΤΕΣΣΕΡΑ']
         wordList=[]
         testCase=findWords(letter,color,position,words,wordList)
-        self.assertNotEqual(['ΕΝΑ',testCase])
+        self.assertNotEqual(['ΕΝΑ'],testCase)
         
     
         
@@ -38,7 +38,16 @@ class TestSolver(unittest.TestCase):
         words=['ΕΝΑ','ΔΥΟ','ΤΡΙΑ','ΤΕΣΣΕΡΑ']
         wordList=[]
         testCase=findWords(letter,color,position,words,wordList)
-        self.assertNotEqual(['ΕΝΑ',testCase])
+        self.assertNotEqual(['ΕΝΑ'],testCase)
+        
+
+        letter='Α'
+        color='B' 
+        position=4
+        words=['ΚΑΜΒΑ','ΚΑΛΟΣ']
+        wordList=[]
+        testCase=findWords(letter,color,position,words,wordList)
+        self.assertEqual(['ΚΑΛΟΣ',],testCase)
         
         
         
