@@ -3,7 +3,7 @@
 # dependencies
 /Word-API/node_modules
 
-/public
+
 /node_modules
 /.pnp
 .pnp.js

@@ -7,14 +7,14 @@ var disabled_letters = []
 function Letter(props, i) {
 
     let sqStyle= "";
-    if(props.class==="almost"){
+    if(props.class==="almost"){ //yellow
 
         sqStyle={animation:"flip 0.7s ease forwards",backgroundColor: "#c5af41",};
     }
-    else if(props.class==="correct"){
+    else if(props.class==="correct"){ //green
         sqStyle={animation:"flip 0.7s ease forwards",backgroundColor: "#458a40",};
     }
-    else if (props.class === "false"){
+    else if (props.class === "false"){ //red
         sqStyle={animation:"flip 0.7s ease forwards",backgroundColor: "#f8f8f8",};
     }
     else{
@@ -38,7 +38,6 @@ class Word extends React.Component {
     }
 
     renderLetter(i) {
-        //const colours = ["correct", "correct", "false", "false", "false"];
         return(
             <Letter content = {this.props.content[i]} class = {this.props.colours[i]}/>
         );
@@ -58,6 +57,21 @@ class Word extends React.Component {
     }
 }
 
+function DailyWordBtn(props) {
+    return(
+        <button className = "mode-button" onClick={props.onClick}>
+            Λέξη της Ημέρας
+        </button>
+    );
+}
+
+function RandomWordBtn(props) {
+    return(
+        <button className = "mode-button" onClick={props.onClick}>
+            Τυχαία Λέξη
+        </button>
+    );
+}
 
 function Key(props) {
     let sqStyle= {};
@@ -132,6 +146,34 @@ class Keyboard extends React.Component {
     }
 }
 
+function CompletionScreen(props) {
+    let screenDisplay = {display:"none"};
+    if(props.flag){
+        screenDisplay={display: "block"};
+    }
+    return(
+        <div className='completionScreenMain' style = {screenDisplay}>
+            Συγχαρητήρια, βρήκατε τη σωστή λέξη!
+            <br/>
+            <strong>Χρειαστήκατε {props.tries} προσπάθειες.</strong>
+        </div>
+    );
+}
+
+function GameOverScreen(props) {
+    let screenDisplay = {display: "none"};
+    if(props.flag){
+        screenDisplay={display: "block"};
+    }
+    return(
+        <div className='gameOverScreenMain' style = {screenDisplay}>
+            Δυστυχώς εξαντλήθηκαν οι προσπάθειες.
+            <br/>
+            <strong>Η σωστή λέξη ήταν {props.answer}.</strong>
+        </div>
+    );
+}
+
 class Board extends React.Component {
     constructor(props) {
         super(props);
@@ -148,31 +190,43 @@ class Board extends React.Component {
             tries: 0,
             wordSet: '',
             dailyWord: '',
-            DataisLoaded: false
+            randWord: '',
+            DataisLoaded: false,
+            wordFound: false,
+            gameOver: false,
+            answer: '',
         };
         this.callbackLetterClicked=this.callbackLetterClicked.bind(this);
+        this.dailyWordOnClick=this.dailyWordOnClick.bind(this);
+        this.randWordOnClick=this.randWordOnClick.bind(this);
     }
     componentDidMount() {
         this.getData();
     }
-    async getData() {
+    async getData() { //get word from API
         try {
-        const result = await fetch("http://localhost:8080/dailyword");
+        const result = await fetch("http://localhost:8080/dailyword"); //daily word
         const toJson = await result.json();
         const stringify = JSON.stringify(toJson, null, 2);
         const json = JSON.parse(stringify);
-        console.log(json)
-        const listResult = await fetch("http://localhost:8080/wordlist");
+
+        const randResult = await fetch("http://localhost:8080/randomword"); //random word
+        const randToJson = await randResult.json();
+        const randStringify = JSON.stringify(randToJson, null, 2);
+        const randJson = JSON.parse(randStringify);
+
+        const listResult = await fetch("http://localhost:8080/wordlist"); //wordlist
         const listToJson = await listResult.json();
         const listStringify = JSON.stringify(listToJson, null, 2);
         const listJson = JSON.parse(listStringify);
-        console.log(listJson)
-        console.log(json)
+
         const newSet = new Set(listJson.data);
         this.setState({
             dailyWord: json.data,
+            randWord: randJson.data,
             wordSet: newSet,
-            DataisLoaded: true
+            DataisLoaded: true,
+            answer: json.data,
         })
         } catch (error) {
           // ignore error.
@@ -188,42 +242,61 @@ class Board extends React.Component {
         
         while(words[ind1][ind2]){
             ind2++;
-        } 
-        if(letter === 'Del'){
-            words[ind1][ind2-1] = null;
-            ind2--;
-        } else if(letter === 'Enter') {
-            let flag = false;
-            if(ind2 === 5){
-                let currWord='';
-                for(let i=0;i<5;i++){
-                    currWord+=this.state.words[ind1][i];
-                }
-                if(currWord === this.state.dailyWord){
-                    this.setState({tries: -1});
-                    alert("Σωστή Λέξη!") // finish game 
-                    //todo Return Session Stats
-                }
-                else if(this.state.wordSet.has(currWord)){
-                    console.log('eureka');
-                    this.setState({tries: ind1+1});
-                }
-                else{
-                    flag=true;
-                    alert("Μη Έγκυρη Λεξη!")
-                }
-            }
-            if(!flag && ind2 === 5){
-                colours[ind1]  = checkColours(words[ind1], colours[ind1], this.state.dailyWord);
-            }
-        } else if(ind2 <= 4){
-            words[ind1][ind2] = letter;
         }
-        this.setState({
-            words: words,
-            colours: colours,
-        })
+        if(!this.state.wordFound && !this.state.gameOver){
+            if(letter === 'Del'){
+                words[ind1][ind2-1] = null;
+                ind2--;
+            } else if(letter === 'Enter') {
+                let flag = false;
+                if(ind2 === 5){
+                    let currWord='';
+                    for(let i=0;i<5;i++){
+                        currWord+=this.state.words[ind1][i];
+                    }
+                    if(currWord === this.state.answer){
+                        this.setState({
+                            tries: ind1+1,
+                            wordFound: true,
+                        }); // finish game
+                    }
+                    else if(this.state.wordSet.has(currWord)){
+                        if(ind1 >= 5){
+                            this.setState({
+                                tries: ind1+1,
+                                gameOver: true,
+                            })
+                        }else{
+                            this.setState({tries: ind1+1});
+                        }
+                        
+                    }
+                    else{
+                        flag=true;
+                        alert("Μη Έγκυρη Λεξη!")
+                    }
+                }
+                if(!flag && ind2 === 5){
+                    colours[ind1]  = checkColours(words[ind1], colours[ind1], this.state.answer);
+                }
+            } else if(ind2 <= 4){
+                words[ind1][ind2] = letter;
+            }
+            this.setState({
+                words: words,
+                colours: colours,
+            })
+        }
     }
+
+    dailyWordOnClick() { //changes correct answer to dailyWord (default)
+        this.setState({answer: this.state.dailyWord})
+    }
+
+    randWordOnClick() { //changes correct answer to randomWord
+        this.setState({answer: this.state.randWord})
+    }
+
     renderWord(i) {
         return(
             <Word content = {this.state.words[i]} colours = {this.state.colours[i]}/>
@@ -233,6 +306,10 @@ class Board extends React.Component {
     render() {
         return (
             <div className='game-board'>
+                <div className = "mode-selection">
+                    <DailyWordBtn onClick = {this.dailyWordOnClick}/>
+                    <RandomWordBtn onClick = {this.randWordOnClick}/>
+                </div>
                 <div className = 'words'>
                     {this.renderWord(0)}
                     {this.renderWord(1)}
@@ -240,6 +317,10 @@ class Board extends React.Component {
                     {this.renderWord(3)}
                     {this.renderWord(4)}
                     {this.renderWord(5)}
+                </div>
+                <div className = 'final-screen'>
+                    <CompletionScreen tries = {this.state.tries} flag = {this.state.wordFound}/>
+                    <GameOverScreen answer = {this.state.answer} flag = {this.state.gameOver}/>
                 </div>
                 <div className='keyboard'>
                     <Keyboard callback = {this.callbackLetterClicked}/>
