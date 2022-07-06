@@ -25,23 +25,27 @@ def enterSequence(letterSequence,colorSequence):
     return combSequence
 
 def findWords(letter,color,position,words,wordlist):
-
+    blackwords = []
     for word in words:
         if word=='':break
-        
-        if color == 'π' or color == 'Π':
+
+        elif color == 'π' or color == 'Π':
             if word[position]==letter:
                 wordlist.append(word)
-        if color == 'μ' or color == 'Μ':####HERE     
-            if letter not in word:
-                wordlist.append(word)
-            
-        if color == 'κ' or color == 'Κ':
-            if letter in word:
-                if word[position]!=letter:
-                    wordlist.append(word)
 
+        elif color == 'μ' or color == 'Μ':
+            if word[position]==letter :
+                blackwords.append(word)
+
+            else: ##
+                wordlist.append(word)
+
+        elif color == 'κ' or color == 'Κ':
+            wordlist.append(word)
+
+    wordlist = [word for word in wordlist if word not in blackwords]
     words=wordlist.copy()
+
     return words
 
 

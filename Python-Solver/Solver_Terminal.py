@@ -22,27 +22,30 @@ def enterSequence():
     colorSequence=input("Εισάγετε ένα συνδυασμό χρωμάτων, όπως φαίνεται παρακάτω.\nΓια παράδειγμα 'ΚΜΜΠΠ': ")
     for iter in range(0,len(letterSequence)):
         combSequence.append([letterSequence[iter],colorSequence[iter]])
-    return [combSequence,letterSequence,colorSequence]
+    return combSequence
 
-def findWords(letter,color,position,words,wordlist,letterSeq,colorSeq):
-
+def findWords(letter,color,position,words,wordlist):
+    blackwords = []
     for word in words:
         if word=='':break
-        
-        if color == 'π' or color == 'Π':
+
+        elif color == 'π' or color == 'Π':
             if word[position]==letter:
                 wordlist.append(word)
-                
-        if color == 'μ' or color == 'Μ':
-            if word[position]==letter:
-                words.remove(word)
-            
-        if color == 'κ' or color == 'Κ':
-            if letter in word:
-                if word[position]!=letter:
-                    wordlist.append(word)
 
+        elif color == 'μ' or color == 'Μ':
+            if word[position]==letter :
+                blackwords.append(word)
+
+            else: ##
+                wordlist.append(word)
+
+        elif color == 'κ' or color == 'Κ':
+            wordlist.append(word)
+
+    wordlist = [word for word in wordlist if word not in blackwords]
     words=wordlist.copy()
+
     return words
 
 
@@ -57,17 +60,17 @@ def possibleMatches():
     first=0
     while letter!='':
         combSequence=enterSequence()
-        for comb in combSequence[0]:
+        for comb in combSequence:
             
             letter=str(comb[0])
             color=str(comb[1])
             if position==0 and first==0:
-                matches=findWords(letter,color,int(position),words,matches,combSequence[1],combSequence[2])
+                matches=findWords(letter,color,int(position),words,matches)
                 position+=1
                 first=1
             else:
                 emptyList=[]
-                matches=findWords(letter,color,int(position),matches,emptyList,combSequence[1],combSequence[2])
+                matches=findWords(letter,color,int(position),matches,emptyList)
                 position+=1
                   
         print("Πιθανές Λέξεις: ",*matches)
