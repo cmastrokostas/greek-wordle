@@ -237,7 +237,7 @@ class Board extends React.Component {
                     for(let i=0;i<5;i++){
                         currWord+=this.state.words[ind1][i];
                     }
-                    if(currWord === this.state.dailyWord){
+                    if(currWord === this.state.answer){
                         this.setState({
                             tries: ind1+1,
                             wordFound: true,
